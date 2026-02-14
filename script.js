@@ -76,7 +76,7 @@ setTimeout(() => {
   lines.forEach((l) => (l.style.opacity = 0));
   bgHeart.style.opacity = 0;
 
-  final.innerHTML = "Ghostie why are you sooooooo 💜";
+  final.innerHTML = `Ghostie why are you sooooooo 💜<br>`;
   final.classList.add("show");
 }, 17000);
 

@@ -185,6 +185,7 @@ body.love-mode {
   pointer-events: none;
   transition: 1s;
   z-index: 100;
+  margin-bottom: 6rem;
 }
 
 #final.show {
