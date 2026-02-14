@@ -1,97 +1,119 @@
-// Canvas pour fond animé subtil (étoiles / particules légères)
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const assetsContainer = document.getElementById('assetsContainer');
+const mainHeart = document.getElementById('mainHeart');
+const finalMsg = document.getElementById('finalMsg');
+const instruction = document.getElementById('instruction');
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-const particles = [];
-for (let i = 0; i < 60; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2 + 1,
-    speed: Math.random() * 0.4 + 0.1,
-    alpha: Math.random() * 0.5 + 0.3
-  });
-}
-
-function animateBg() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = 'rgba(255,255,255,0.7)';
-  particles.forEach(p => {
-    ctx.globalAlpha = p.alpha;
-    ctx.fillRect(p.x, p.y, p.size, p.size);
-    p.y += p.speed;
-    if (p.y > canvas.height) p.y = -p.size;
-  });
-  ctx.globalAlpha = 1;
-  requestAnimationFrame(animateBg);
-}
-animateBg();
-
-// Génération de cœurs flottants avec tes assets
-const heartsContainer = document.getElementById('hearts');
-const heartImages = [
+const assetFiles = [
+  'lovely_assets1.png',
   'lovely_assets5.png',
   'lovely_assets6.png',
   'lovely_assets7.png',
   'lovely_assets8.png',
   'lovely_assets10.png',
   'lovely_assets11.png'
-  // ajoute les tiens ici
 ];
 
-function createHeart() {
-  const heart = document.createElement('div');
-  heart.classList.add('heart-particle');
+// Crée 20–30 assets qui flottent lentement
+function createFloatingAsset() {
+  const asset = document.createElement('div');
+  asset.classList.add('asset');
 
-  const imgIndex = Math.floor(Math.random() * heartImages.length);
-  heart.style.backgroundImage = `url(${heartImages[imgIndex]})`;
+  const file = assetFiles[Math.floor(Math.random() * assetFiles.length)];
+  asset.style.backgroundImage = `url(${file})`;
 
-  heart.style.left = Math.random() * 100 + 'vw';
-  heart.style.top = '100vh';
-  heart.style.animationDuration = (Math.random() * 20 + 15) + 's';
-  heart.style.animationDelay = Math.random() * 5 + 's';
-  heart.style.opacity = Math.random() * 0.7 + 0.3;
-  heart.style.transform = `rotate(${Math.random() * 40 - 20}deg) scale(${Math.random() * 0.6 + 0.7})`;
+  // Position aléatoire + taille aléatoire
+  const size = Math.random() * 40 + 40; // 40–80px
+  asset.style.width = size + 'px';
+  asset.style.height = size + 'px';
 
-  heartsContainer.appendChild(heart);
+  asset.style.left = Math.random() * 100 + 'vw';
+  asset.style.top = Math.random() * 120 + 'vh'; // un peu en dehors
 
-  setTimeout(() => heart.remove(), 30000);
+  // Animation CSS différente pour chaque
+  const duration = Math.random() * 40 + 50; // 50–90s pour être lent
+  const delay = Math.random() * 10;
+  const rotate = Math.random() * 360;
+
+  asset.style.animation = `float ${duration}s linear infinite`;
+  asset.style.animationDelay = `-${delay}s`;
+  asset.style.transform = `rotate(${rotate}deg)`;
+
+  assetsContainer.appendChild(asset);
+
+  // On enlève quand ils sortent vraiment de l'écran
+  setTimeout(() => {
+    if (asset.getBoundingClientRect().top > window.innerHeight * 1.5) {
+      asset.remove();
+    }
+  }, (duration + delay) * 1000 + 2000);
 }
 
-// Spawn hearts toutes les 400-1200ms
-setInterval(createHeart, 800);
-
-// Texte qui s'affiche ligne par ligne
-const lines = document.querySelectorAll('.line');
-lines.forEach(line => {
-  const delay = parseFloat(line.dataset.delay) * 1000;
-  setTimeout(() => {
-    line.classList.add('visible');
-  }, delay);
-});
-
-// Bonus : clic → explosion de cœurs (mobile friendly)
-document.addEventListener('click', (e) => {
-  for (let i = 0; i < 12; i++) {
-    setTimeout(() => {
-      const heart = document.createElement('div');
-      heart.classList.add('heart-particle');
-      heart.style.backgroundImage = `url(${heartImages[Math.floor(Math.random()*heartImages.length)]})`;
-      heart.style.left = e.clientX + 'px';
-      heart.style.top = e.clientY + 'px';
-      heart.style.transform = `translate(-50%, -50%) rotate(${Math.random()*360}deg)`;
-      heart.style.animation = 'floatOut 2s forwards';
-      heartsContainer.appendChild(heart);
-      setTimeout(() => heart.remove(), 2500);
-    }, i * 80);
+// Animation CSS pour le flottement (à ajouter dans style.css)
+const styleSheet = document.styleSheets[0];
+styleSheet.insertRule(`
+  @keyframes float {
+    0%   { transform: translateY(0) rotate(0deg); }
+    25%  { transform: translateY(-30vh) rotate(15deg); }
+    50%  { transform: translateY(-70vh) rotate(-20deg); }
+    75%  { transform: translateY(-40vh) rotate(10deg); }
+    100% { transform: translateY(-120vh) rotate(0deg); }
   }
-});
+`, styleSheet.cssRules.length);
 
-// Ajoute cette animation CSS dans style.css si tu veux → @keyframes floatOut { to { transform: translateY(-150vh) rotate(720deg); opacity: 0; } }
+// Génère les assets flottants en continu
+setInterval(createFloatingAsset, 1200); // un nouveau toutes les ~1.2s
+
+// Au chargement, on en met déjà quelques-uns
+for (let i = 0; i < 18; i++) {
+  setTimeout(createFloatingAsset, i * 800);
+}
+
+// === FEU D'ARTIFICE AU CLIC ===
+mainHeart.addEventListener('click', (e) => {
+  // Cache l'instruction
+  instruction.style.opacity = '0';
+
+  // Explosion de particules
+  const rect = mainHeart.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 40; i++) {  // 40 particules
+    setTimeout(() => {
+      const particle = document.createElement('div');
+      particle.classList.add('asset');
+
+      const file = assetFiles[Math.floor(Math.random() * assetFiles.length)];
+      particle.style.backgroundImage = `url(${file})`;
+
+      const size = Math.random() * 30 + 30;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+
+      particle.style.left = centerX + 'px';
+      particle.style.top = centerY + 'px';
+      particle.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+
+      const angle = Math.random() * Math.PI * 2;
+      const distance = Math.random() * 180 + 120;
+      const vx = Math.cos(angle) * distance;
+      const vy = Math.sin(angle) * distance;
+
+      particle.style.transition = `all ${Math.random() * 1.2 + 1.2}s ease-out`;
+      assetsContainer.appendChild(particle);
+
+      // Lance la particule
+      setTimeout(() => {
+        particle.style.transform = `translate(${vx}px, ${vy}px) rotate(${Math.random() * 720 - 360}deg) scale(0.3)`;
+        particle.style.opacity = '0';
+      }, 50);
+
+      setTimeout(() => particle.remove(), 3000);
+    }, i * 30); // petit délai pour effet cascade
+  }
+
+  // Affiche le message final après 1.5–2s
+  setTimeout(() => {
+    finalMsg.classList.add('visible');
+  }, 1800);
+});

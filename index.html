@@ -3,32 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Pour toi, Itokiana 💜</title>
+  <title>Pour Itokiana 💜</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="bgCanvas"></canvas>
-  <div class="overlay"></div>
+  <div class="floating-assets" id="assetsContainer"></div>
 
-  <div class="container">
-    <div class="hearts-container" id="hearts"></div>
-
-    <h1 class="glow">Hey Itokiana...</h1>
-
-    <div class="message" id="message">
-      <p class="line" data-delay="1">Je sais que la Saint-Valentin c’est une fête commerciale et tout ça...</p>
-      <p class="line" data-delay="4">Mais même si on est d’accord là-dessus...</p>
-      <p class="line" data-delay="7" style="font-size: 1.6em; margin: 0.8em 0;">Je t’aime vraiment énormément T^T</p>
-      <p class="line" data-delay="11">Merci d’être toi, d’être là, de me faire perdre mes moyens tout le temps</p>
-      <p class="line signature" data-delay="16">
-        Ton petit doudou qui devient tout rouge et muet devant toi 💜
-      </p>
-    </div>
-
-    <div class="final-heart">
-      <img src="lovely_assets5.png" alt="big heart" class="big-asset pulse">
-    </div>
+  <div class="center-heart">
+    <img src="lovely_assets5.png" alt="big heart" id="mainHeart">
+    <p id="instruction">touche-moi 💜</p>
   </div>
+
+  <div class="final-message" id="finalMsg">you Spicy dude</div>
 
   <script src="script.js"></script>
 </body>
