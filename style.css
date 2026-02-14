@@ -299,3 +299,146 @@ body.love-mode {
     font-size: 5rem;
   }
 }
+/* ================= ANDROID BIG PHONES 6" - 6.8" ================= */
+@media (max-width: 480px) and (min-height: 800px) {
+  body {
+    font-size: 14px;
+  }
+
+  /* Heart center */
+  #heart {
+    width: 120px;
+  }
+
+  #tap {
+    font-size: 1rem;
+  }
+
+  /* Title */
+  #title {
+    font-size: 1.9rem;
+  }
+
+  .line {
+    font-size: 1rem;
+    padding: 0 1rem;
+  }
+
+  .big {
+    font-size: 1.5rem;
+  }
+
+  .signature {
+    font-size: 0.9rem;
+  }
+
+  /* Ghostie text */
+  #final {
+    font-size: 2rem;
+    padding: 1rem;
+  }
+
+  /* Countdown */
+  #countdown {
+    font-size: 4rem;
+  }
+
+  /* Floating assets smaller */
+  .asset {
+    opacity: 0.8;
+  }
+}
+
+/* ================= VERY TALL PHONES (ZTE A35, Redmi full screen) ================= */
+@media (max-width: 480px) and (min-height: 900px) {
+  #heart {
+    width: 110px;
+  }
+
+  #title {
+    font-size: 1.7rem;
+  }
+
+  .line {
+    font-size: 0.95rem;
+  }
+
+  .big {
+    font-size: 1.4rem;
+  }
+
+  #final {
+    font-size: 1.9rem;
+  }
+
+  #countdown {
+    font-size: 3.8rem;
+  }
+}
+.flash {
+  animation: flash 0.2s;
+}
+@keyframes flash {
+  from {
+    background: white;
+  }
+  to {
+    background: black;
+  }
+}
+/* ================= LAPTOP 13" - 14" ================= */
+@media (min-width: 1024px) and (max-width: 1600px) {
+  body {
+    font-size: 16px;
+  }
+
+  /* Heart center */
+  #heart {
+    width: 160px;
+  }
+
+  #tap {
+    font-size: 1.2rem;
+  }
+
+  /* Title */
+  #title {
+    font-size: 2.4rem;
+  }
+
+  .line {
+    font-size: 1.2rem;
+  }
+
+  .big {
+    font-size: 1.9rem;
+  }
+
+  .signature {
+    font-size: 1.1rem;
+  }
+
+  /* Ghostie text */
+  #final {
+    font-size: 3rem;
+  }
+
+  /* Countdown */
+  #countdown {
+    font-size: 5rem;
+  }
+
+  /* Floating assets */
+  .asset {
+    opacity: 1;
+  }
+}
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 60%, black 100%);
+  opacity: 0.5;
+  z-index: 99999;
+}

@@ -37,7 +37,7 @@ document.body.addEventListener(
       loveSound.currentTime = 0;
     });
   },
-  { once: true }
+  { once: true },
 );
 
 // FLOATING PARTICLES
@@ -110,30 +110,32 @@ function startCountdown() {
 let particles = [];
 
 function heartShape(t) {
-  return {
-    x: 16 * Math.sin(t) ** 3,
-    y: -(
-      13 * Math.cos(t) -
-      5 * Math.cos(2 * t) -
-      2 * Math.cos(3 * t) -
-      Math.cos(4 * t)
-    ),
-  };
+  const x = 16 * Math.sin(t) ** 3;
+  const y = -(
+    13 * Math.cos(t) -
+    5 * Math.cos(2 * t) -
+    2 * Math.cos(3 * t) -
+    Math.cos(4 * t)
+  );
+
+  return { x, y };
 }
 
 function createHeartFirework() {
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
 
-  for (let i = 0; i < 400; i++) {
+  const COUNT = innerWidth < 500 ? 200 : innerWidth < 1200 ? 350 : 600;
+  for (let i = 0; i < COUNT; i++) {
     const t = (Math.PI * 2 * i) / 400;
     const p = heartShape(t);
 
+    const scale = innerWidth < 500 ? 4 : innerWidth < 1000 ? 5 : 7;
     particles.push({
       x: cx,
       y: cy,
-      vx: p.x * 6,
-      vy: p.y * 6,
+      vx: p.x * scale,
+      vy: p.y * scale,
       alpha: 1,
       size: 3 + Math.random() * 2,
       hue: 300 + Math.random() * 60,
@@ -142,7 +144,7 @@ function createHeartFirework() {
 }
 
 function animateFireworks() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
   particles.forEach((p) => {
     p.x += p.vx * 0.02;
@@ -170,7 +172,7 @@ function launchFireworks() {
 
   // 🔥 FORCE HIDE ALL TEXT FOREVER
   title.style.display = "none";
-  lines.forEach(l => l.style.display = "none");
+  lines.forEach((l) => (l.style.display = "none"));
   final.style.display = "none";
   messageBox.style.display = "none";
   bgHeart.style.display = "none";
@@ -217,7 +219,7 @@ function createTextParticles(text) {
 
   const img = tctx.getImageData(0, 0, textCanvas.width, textCanvas.height).data;
   textParticles = [];
-  const gap = innerWidth < 500 ? 5 : 3;
+  const gap = innerWidth < 500 ? 7 : innerWidth < 1200 ? 4 : 2;
 
   for (let y = 0; y < textCanvas.height; y += gap) {
     for (let x = 0; x < textCanvas.width; x += gap) {
@@ -255,3 +257,32 @@ function animateTextParticles() {
 
   requestAnimationFrame(animateTextParticles);
 }
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + "px";
+  canvas.style.height = window.innerHeight + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  textCanvas.width = window.innerWidth;
+  textCanvas.height = window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+window.addEventListener("resize", resizeCanvas);
+heart.addEventListener("click", () => {
+  loveSound.currentTime = 0;
+  loveSound.play().catch(() => {});
+});
+if (navigator.vibrate) {
+  navigator.vibrate([200, 100, 200, 100, 200]);
+}
+console.log("DPR:", window.devicePixelRatio);
