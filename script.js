@@ -117,20 +117,19 @@ function heartShape(t) {
     2 * Math.cos(3 * t) -
     Math.cos(4 * t)
   );
-
   return { x, y };
 }
 
 function createHeartFirework() {
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight / 2;
+  const cx = canvas.width / (2 * (window.devicePixelRatio || 1));
+  const cy = canvas.height / (2 * (window.devicePixelRatio || 1));
 
   const COUNT = innerWidth < 500 ? 200 : innerWidth < 1200 ? 350 : 600;
   for (let i = 0; i < COUNT; i++) {
     const t = (Math.PI * 2 * i) / 400;
     const p = heartShape(t);
 
-    const scale = innerWidth < 500 ? 4 : innerWidth < 1000 ? 5 : 7;
+    const scale = innerWidth < 500 ? 3.5 : innerWidth < 1000 ? 5 : 7;
     particles.push({
       x: cx,
       y: cy,
@@ -259,17 +258,16 @@ function animateTextParticles() {
 }
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
-
   canvas.width = window.innerWidth * dpr;
   canvas.height = window.innerHeight * dpr;
   canvas.style.width = window.innerWidth + "px";
   canvas.style.height = window.innerHeight + "px";
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-  textCanvas.width = window.innerWidth;
-  textCanvas.height = window.innerHeight;
 }
+
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
