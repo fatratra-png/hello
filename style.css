@@ -1,21 +1,27 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* ===== GLOBAL BODY ===== */
 body {
   height: 100vh;
-  background: radial-gradient(circle at top,#0b0015, #2a003a);
+  background: radial-gradient(circle at top, #0b0015, #1a001f);
   font-family: "Baloo 2", "Fredoka", sans-serif;
   overflow: hidden;
-  transition: background 4s ease-in-out;
+  transition: background 3s ease-in-out;
 }
 
+/* Force same dark bg even in love mode */
+
+/* IMPORTANT: bloque tout changement */
 body.love-mode {
-  background: radial-gradient(circle at center, #2a003a, #0b0015);
+  background: radial-gradient(circle at top, #0b0015, #1a001f) !important;
 }
 
+/* ===== BACKGROUND HEART ===== */
 #bgHeart {
   position: fixed;
   inset: 0;
@@ -23,23 +29,27 @@ body.love-mode {
   opacity: 0;
   filter: blur(6px);
   transition: 3s;
-}
-#bgHeart.show {
-  opacity: 0.15;
+  z-index: 1;
 }
 
+#bgHeart.show {
+  opacity: 0.12;
+}
+
+/* ===== FLOATING ASSETS ===== */
 #assets {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .asset {
   position: absolute;
   background-size: contain;
   background-repeat: no-repeat;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
   animation: float 60s linear infinite;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
 }
 
 @keyframes float {
@@ -51,6 +61,7 @@ body.love-mode {
   }
 }
 
+/* ===== MAIN HEART CENTER ===== */
 .heart-center {
   position: fixed;
   top: 50%;
@@ -65,6 +76,7 @@ body.love-mode {
   cursor: pointer;
   animation: pulse 2s infinite;
   transition: 2s;
+  filter: drop-shadow(0 0 20px rgba(160, 80, 255, 0.6));
 }
 
 @keyframes pulse {
@@ -83,24 +95,38 @@ body.love-mode {
   pointer-events: none;
 }
 
+/* TAP TEXT */
 #tap {
   font-size: 1.4rem;
-  color: #7e22ce;
+  color: #b066ff;
   margin-top: 0.6rem;
+  animation: fadeInOut 2s infinite;
 }
 
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ===== MESSAGES ===== */
 .message-box {
   position: fixed;
   bottom: 10%;
   width: 100%;
   text-align: center;
   pointer-events: none;
+  z-index: 5;
 }
 
 #title {
   font-size: 2.8rem;
   color: white;
-  text-shadow: 0 0 30px #c084fc;
+  text-shadow: 0 0 30px #8b5cf6;
   opacity: 0;
   transform: translateY(20px);
   transition: 1.2s;
@@ -111,14 +137,15 @@ body.love-mode {
   transform: translateY(10px);
   transition: 1s;
   font-size: 1.3rem;
-  color: #e9d5ff;
-  text-shadow: 0 0 8px #9333ea;
+  color: #ddd6fe;
+  text-shadow: 0 0 8px #7c3aed;
+  margin: 0.5rem 0;
 }
 
 .big {
   font-size: 2rem;
   font-weight: 800;
-  color: #f0abfc;
+  color: #e879f9;
   animation: lovePulse 2s infinite;
 }
 
@@ -142,6 +169,7 @@ body.love-mode {
   transform: translateY(0) !important;
 }
 
+/* ===== FINAL MESSAGE (Ghostie) ===== */
 #final {
   position: fixed;
   inset: 0;
@@ -149,44 +177,34 @@ body.love-mode {
   align-items: center;
   justify-content: center;
   font-size: 3.8rem;
-  font-weight: 800;
+  font-weight: 900;
   color: white;
   text-align: center;
-  text-shadow: 0 0 50px #ff6fff;
+  text-shadow: 0 0 50px #b066ff;
   opacity: 0;
   pointer-events: none;
-  transition: 2s;
+  transition: 1s;
+  z-index: 100;
 }
+
 #final.show {
   opacity: 1;
 }
+
+#final.hide {
+  opacity: 0;
+}
+
+/* ===== FIREWORKS CANVAS ===== */
 #fireworks {
   position: fixed;
   inset: 0;
   display: none;
   z-index: 999;
-  background: radial-gradient(circle at center, #050010, #000) !important;
+  background: transparent !important ; /* IMPORTANT */
 }
 
-.hide-all {
-  opacity: 0 !important;
-  transition: 2s;
-}
-.line.wait {
-  color: #fff;
-  font-size: 1.5rem;
-  animation: blink 1.2s infinite;
-}
-
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
+/* ===== COUNTDOWN ===== */
 #countdown {
   position: fixed;
   inset: 0;
@@ -194,20 +212,62 @@ body.love-mode {
   align-items: center;
   justify-content: center;
   font-size: 6rem;
-  font-weight: 800;
+  font-weight: 900;
   color: white;
-  text-shadow: 0 0 40px #ff6fff;
+  text-shadow: 0 0 40px #ffffff;
   opacity: 0;
   pointer-events: none;
   z-index: 1000;
-  transition: 0.5s;
-  background-color: #0b0015;
+  background: #05000a; /* PURE DARK */
+  transition: 0.3s;
 }
 
 #countdown.show {
   opacity: 1;
+  animation: beat 1s infinite;
 }
-/* Redmi Note 12S & phones ~412px width */
+
+@keyframes beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* ===== EFFECTS ===== */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(5px, -5px);
+  }
+  60% {
+    transform: translate(-5px, 0);
+  }
+  80% {
+    transform: translate(5px, 0);
+  }
+}
+
+@keyframes textGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px #b066ff;
+  }
+  50% {
+    text-shadow: 0 0 40px #d946ef;
+  }
+}
+
+/* ===== RESPONSIVE REDMI NOTE 12S ===== */
 @media (max-width: 412px) and (min-height: 800px) {
   #heart {
     width: 130px;
@@ -230,59 +290,11 @@ body.love-mode {
   }
 
   #final {
-    font-size: 2.4rem;
+    font-size: 2.3rem;
     padding: 1rem;
   }
 
   #countdown {
     font-size: 5rem;
-  }
-}
-body.blackout {
-  background: black !important;
-}
-
-body.blackout *:not(#countdown):not(#fireworks) {
-  opacity: 0 !important;
-  transition: 1.5s;
-}
-@keyframes shake {
-  0%,
-  100% {
-    transform: translate(0);
-  }
-  20% {
-    transform: translate(-5px, 5px);
-  }
-  40% {
-    transform: translate(5px, -5px);
-  }
-  60% {
-    transform: translate(-5px, 0);
-  }
-  80% {
-    transform: translate(5px, 0);
-  }
-}
-#countdown.show {
-  animation: beat 1s infinite;
-}
-
-@keyframes beat {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.15);
-  }
-}
-@keyframes textGlow {
-  0%,
-  100% {
-    text-shadow: 0 0 10px #ff8aff;
-  }
-  50% {
-    text-shadow: 0 0 40px #ff00ff;
   }
 }

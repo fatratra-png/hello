@@ -1,3 +1,4 @@
+// ELEMENTS
 const assets = document.getElementById("assets");
 const heart = document.getElementById("heart");
 const tap = document.getElementById("tap");
@@ -9,7 +10,9 @@ const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
 const loveSound = document.getElementById("loveSound");
 const countdown = document.getElementById("countdown");
+const messageBox = document.querySelector(".message-box");
 
+// Canvas size
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 window.onresize = () => {
@@ -17,6 +20,7 @@ window.onresize = () => {
   canvas.height = innerHeight;
 };
 
+// ASSETS
 const files = [
   "lovely_assets1.png",
   "lovely_assets6.png",
@@ -24,7 +28,7 @@ const files = [
   "lovely_assets8.png",
 ];
 
-// 🔓 UNLOCK AUDIO
+// AUDIO UNLOCK
 document.body.addEventListener(
   "click",
   () => {
@@ -33,7 +37,7 @@ document.body.addEventListener(
       loveSound.currentTime = 0;
     });
   },
-  { once: true },
+  { once: true }
 );
 
 // FLOATING PARTICLES
@@ -51,55 +55,60 @@ function spawnAsset() {
 for (let i = 0; i < 20; i++) setTimeout(spawnAsset, i * 400);
 setInterval(spawnAsset, 1200);
 
-// TEXT REVEAL
+// =====================
+// 🎬 TEXT TIMELINE
+// =====================
+
+// Show intro messages
 setTimeout(() => {
   title.classList.add("show");
   heart.classList.add("fade-out");
   tap.style.opacity = 0;
-  document.body.classList.add("love-mode");
-  setTimeout(() => bgHeart.classList.add("show"), 3000);
+
   lines.forEach((l) => {
     setTimeout(() => l.classList.add("show"), l.dataset.delay * 1000);
   });
 }, 1500);
 
-// HEART EXPLOSION
-heart.onclick = () => {
-  const r = heart.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const cy = r.top + r.height / 2;
-
-  for (let i = 0; i < 40; i++) {
-    const p = document.createElement("div");
-    p.className = "asset";
-    p.style.backgroundImage = `url(${files[(Math.random() * files.length) | 0]})`;
-    p.style.width = p.style.height = 20 + Math.random() * 40 + "px";
-    p.style.left = cx + "px";
-    p.style.top = cy + "px";
-
-    const a = Math.random() * Math.PI * 2;
-    const d = 150 + Math.random() * 250;
-    const x = Math.cos(a) * d;
-    const y = Math.sin(a) * d;
-
-    assets.appendChild(p);
-    requestAnimationFrame(() => {
-      p.style.transition = "1.6s";
-      p.style.transform = `translate(${x}px,${y}px) scale(.2)`;
-      p.style.opacity = 0;
-    });
-    setTimeout(() => p.remove(), 2500);
-  }
-};
-
-// FINAL TEXT
+// 🔥 17s → EVERYTHING DISAPPEARS + GHOSTIE
 setTimeout(() => {
-  final.innerHTML = "Ghostie why are you sooooooo💜";
-  final.classList.add("show");
-}, 18000);
+  title.style.opacity = 0;
+  lines.forEach((l) => (l.style.opacity = 0));
+  bgHeart.style.opacity = 0;
 
-// ❤️ HEART FIREWORK MATH
+  final.innerHTML = "Ghostie why are you sooooooo 💜";
+  final.classList.add("show");
+}, 17000);
+
+// ⏱️ 18s → COUNTDOWN
+setTimeout(startCountdown, 18000);
+
+function startCountdown() {
+  final.classList.remove("show");
+
+  let c = 3;
+  countdown.style.display = "flex";
+  countdown.classList.add("show");
+  countdown.innerText = c;
+
+  const timer = setInterval(() => {
+    c--;
+    if (c > 0) {
+      countdown.innerText = c;
+    } else {
+      clearInterval(timer);
+      countdown.classList.remove("show");
+      countdown.style.display = "none";
+      launchFireworks();
+    }
+  }, 1000);
+}
+
+// =====================
+// ❤️ HEART FIREWORKS
+// =====================
 let particles = [];
+
 function heartShape(t) {
   return {
     x: 16 * Math.sin(t) ** 3,
@@ -111,12 +120,15 @@ function heartShape(t) {
     ),
   };
 }
+
 function createHeartFirework() {
-  const cx = canvas.width / 2,
-    cy = canvas.height / 2;
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
   for (let i = 0; i < 400; i++) {
-    const t = Math.PI * 2 * (i / 400);
+    const t = (Math.PI * 2 * i) / 400;
     const p = heartShape(t);
+
     particles.push({
       x: cx,
       y: cy,
@@ -124,83 +136,65 @@ function createHeartFirework() {
       vy: p.y * 6,
       alpha: 1,
       size: 3 + Math.random() * 2,
+      hue: 300 + Math.random() * 60,
     });
   }
 }
+
 function animateFireworks() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.shadowBlur = 20;
-  ctx.shadowColor = "#ff66ff"; // glow violet
-
-  particles.forEach(p => {
+  particles.forEach((p) => {
     p.x += p.vx * 0.02;
     p.y += p.vy * 0.02;
     p.alpha -= 0.004;
 
-    ctx.fillStyle = `rgba(255,100,255,${p.alpha})`;
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = `hsl(${p.hue},100%,70%)`;
+    ctx.fillStyle = `hsla(${p.hue},100%,70%,${p.alpha})`;
+
     ctx.beginPath();
-    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
   });
 
-  particles = particles.filter(p => p.alpha > 0);
+  particles = particles.filter((p) => p.alpha > 0);
   requestAnimationFrame(animateFireworks);
 }
 
-
-// 🎬 FINAL CINEMA SEQUENCE
-setTimeout(startFinalSequence, 20000);
-
-function startFinalSequence() {
-  document.body.classList.add("blackout");
-
-  let count = 3;
-  countdown.classList.add("show");
-  countdown.innerText = count;
-
-  const timer = setInterval(() => {
-    count--;
-    if (count > 0) {
-      countdown.innerText = count;
-      document.body.style.animation = "shake .3s";
-    } else {
-      clearInterval(timer);
-      countdown.classList.remove("show");
-      launchFireworks();
-    }
-  }, 1000);
-}
-
+// =====================
+// 🎆 LAUNCH FIREWORKS
+// =====================
 function launchFireworks() {
   canvas.style.display = "block";
+
+  // 🔥 FORCE HIDE ALL TEXT FOREVER
+  title.style.display = "none";
+  lines.forEach(l => l.style.display = "none");
+  final.style.display = "none";
+  messageBox.style.display = "none";
+  bgHeart.style.display = "none";
+
+  // Play music
   loveSound.currentTime = 0;
   loveSound.volume = 1;
-  loveSound.play().catch(() => alert("Active le son 💜"));
+  loveSound.play().catch(() => console.log("Audio blocked"));
 
   createHeartFirework();
   animateFireworks();
   setInterval(createHeartFirework, 2000);
 
-  // After fireworks → draw her name
+  // After 25s → draw her name
   setTimeout(() => {
     particles = [];
-    document.fonts.ready.then(() => {
-      createTextParticles("ITOKIANA");
-      animateTextParticles();
-    });
+    createTextParticles("ITOKIANA");
+    animateTextParticles();
   }, 25000);
 }
-document.fonts.ready.then(() => {
-  createTextParticles("ITOKIANA");
-  animateTextParticles();
-});
 
-function showFinalMessages() {
-  final.innerHTML = "Itokiana 💜<br>Loyaaaaaaaa.";
-  final.classList.add("show");
-}
+// =====================
+// ✨ TEXT PARTICLES (NAME)
+// =====================
 const textCanvas = document.getElementById("textCanvas");
 const tctx = textCanvas.getContext("2d");
 textCanvas.width = innerWidth;
@@ -208,15 +202,13 @@ textCanvas.height = innerHeight;
 
 let textParticles = [];
 
-// CREATE TEXT PARTICLES
 function createTextParticles(text) {
   textCanvas.width = innerWidth;
   textCanvas.height = innerHeight;
 
   tctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
-
-  // BIG LOVE FONT
   const fontSize = Math.min(innerWidth / 5, 200);
+
   tctx.fillStyle = "white";
   tctx.textAlign = "center";
   tctx.textBaseline = "middle";
@@ -225,8 +217,7 @@ function createTextParticles(text) {
 
   const img = tctx.getImageData(0, 0, textCanvas.width, textCanvas.height).data;
   textParticles = [];
-
-  const gap = window.innerWidth < 500 ? 5 : 3;
+  const gap = innerWidth < 500 ? 5 : 3;
 
   for (let y = 0; y < textCanvas.height; y += gap) {
     for (let x = 0; x < textCanvas.width; x += gap) {
@@ -245,10 +236,8 @@ function createTextParticles(text) {
   }
 }
 
-// ANIMATE TEXT PARTICLES
 function animateTextParticles() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.shadowBlur = 15;
   ctx.shadowColor = "#ff66ff";
@@ -266,9 +255,3 @@ function animateTextParticles() {
 
   requestAnimationFrame(animateTextParticles);
 }
-
-ctx.shadowBlur = 20;
-ctx.shadowColor = "#ff66ff";
-canvas.style.background = "white";
-setTimeout(() => (canvas.style.background = "black"), 100);
-canvas.style.background = "red";
