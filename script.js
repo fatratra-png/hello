@@ -1,119 +1,84 @@
-const assetsContainer = document.getElementById('assetsContainer');
-const mainHeart = document.getElementById('mainHeart');
-const finalMsg = document.getElementById('finalMsg');
-const instruction = document.getElementById('instruction');
+const assets = document.getElementById("assets");
+const heart = document.getElementById("heart");
+const tap = document.getElementById("tap");
+const title = document.getElementById("title");
+const lines = document.querySelectorAll(".line");
+const final = document.getElementById("final");
+const bgHeart = document.getElementById("bgHeart");
 
-const assetFiles = [
-  'lovely_assets1.png',
-  'lovely_assets5.png',
-  'lovely_assets6.png',
-  'lovely_assets7.png',
-  'lovely_assets8.png',
-  'lovely_assets10.png',
-  'lovely_assets11.png'
+const files = [
+  "lovely_assets1.png",
+  "lovely_assets6.png",
+  "lovely_assets7.png",
+  "lovely_assets8.png"
 ];
 
-// Crée 20–30 assets qui flottent lentement
-function createFloatingAsset() {
-  const asset = document.createElement('div');
-  asset.classList.add('asset');
-
-  const file = assetFiles[Math.floor(Math.random() * assetFiles.length)];
-  asset.style.backgroundImage = `url(${file})`;
-
-  // Position aléatoire + taille aléatoire
-  const size = Math.random() * 40 + 40; // 40–80px
-  asset.style.width = size + 'px';
-  asset.style.height = size + 'px';
-
-  asset.style.left = Math.random() * 100 + 'vw';
-  asset.style.top = Math.random() * 120 + 'vh'; // un peu en dehors
-
-  // Animation CSS différente pour chaque
-  const duration = Math.random() * 40 + 50; // 50–90s pour être lent
-  const delay = Math.random() * 10;
-  const rotate = Math.random() * 360;
-
-  asset.style.animation = `float ${duration}s linear infinite`;
-  asset.style.animationDelay = `-${delay}s`;
-  asset.style.transform = `rotate(${rotate}deg)`;
-
-  assetsContainer.appendChild(asset);
-
-  // On enlève quand ils sortent vraiment de l'écran
-  setTimeout(() => {
-    if (asset.getBoundingClientRect().top > window.innerHeight * 1.5) {
-      asset.remove();
-    }
-  }, (duration + delay) * 1000 + 2000);
+// FLOATING PARTICLES
+function spawnAsset(){
+  const el=document.createElement("div");
+  el.className="asset";
+  el.style.backgroundImage=`url(${files[Math.random()*files.length|0]})`;
+  const s=30+Math.random()*50;
+  el.style.width=el.style.height=s+"px";
+  el.style.left=Math.random()*100+"vw";
+  el.style.animationDuration=(40+Math.random()*40)+"s";
+  assets.appendChild(el);
+  setTimeout(()=>el.remove(),90000);
 }
+for(let i=0;i<20;i++)setTimeout(spawnAsset,i*400);
+setInterval(spawnAsset,1200);
 
-// Animation CSS pour le flottement (à ajouter dans style.css)
-const styleSheet = document.styleSheets[0];
-styleSheet.insertRule(`
-  @keyframes float {
-    0%   { transform: translateY(0) rotate(0deg); }
-    25%  { transform: translateY(-30vh) rotate(15deg); }
-    50%  { transform: translateY(-70vh) rotate(-20deg); }
-    75%  { transform: translateY(-40vh) rotate(10deg); }
-    100% { transform: translateY(-120vh) rotate(0deg); }
+// TEXT REVEAL + CINEMA MODE
+setTimeout(()=>{
+  title.classList.add("show");
+
+  // HEART DISAPPEAR
+  heart.classList.add("fade-out");
+  tap.style.opacity=0;
+
+  // DARK LOVE MODE
+  document.body.classList.add("love-mode");
+
+  // BACKGROUND HEART
+  setTimeout(()=>bgHeart.classList.add("show"),3000);
+
+  // LINES
+  lines.forEach(l=>{
+    setTimeout(()=>l.classList.add("show"), l.dataset.delay*1000);
+  });
+},1500);
+
+// HEART EXPLOSION
+heart.onclick=()=>{
+  const r=heart.getBoundingClientRect();
+  const cx=r.left+r.width/2;
+  const cy=r.top+r.height/2;
+
+  for(let i=0;i<40;i++){
+    const p=document.createElement("div");
+    p.className="asset";
+    p.style.backgroundImage=`url(${files[Math.random()*files.length|0]})`;
+    p.style.width=p.style.height=(20+Math.random()*40)+"px";
+    p.style.left=cx+"px";
+    p.style.top=cy+"px";
+
+    const a=Math.random()*Math.PI*2;
+    const d=150+Math.random()*250;
+    const x=Math.cos(a)*d;
+    const y=Math.sin(a)*d;
+
+    assets.appendChild(p);
+    requestAnimationFrame(()=>{
+      p.style.transition="1.6s";
+      p.style.transform=`translate(${x}px,${y}px) scale(.2)`;
+      p.style.opacity=0;
+    });
+    setTimeout(()=>p.remove(),2500);
   }
-`, styleSheet.cssRules.length);
+};
 
-// Génère les assets flottants en continu
-setInterval(createFloatingAsset, 1200); // un nouveau toutes les ~1.2s
-
-// Au chargement, on en met déjà quelques-uns
-for (let i = 0; i < 18; i++) {
-  setTimeout(createFloatingAsset, i * 800);
-}
-
-// === FEU D'ARTIFICE AU CLIC ===
-mainHeart.addEventListener('click', (e) => {
-  // Cache l'instruction
-  instruction.style.opacity = '0';
-
-  // Explosion de particules
-  const rect = mainHeart.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
-
-  for (let i = 0; i < 40; i++) {  // 40 particules
-    setTimeout(() => {
-      const particle = document.createElement('div');
-      particle.classList.add('asset');
-
-      const file = assetFiles[Math.floor(Math.random() * assetFiles.length)];
-      particle.style.backgroundImage = `url(${file})`;
-
-      const size = Math.random() * 30 + 30;
-      particle.style.width = size + 'px';
-      particle.style.height = size + 'px';
-
-      particle.style.left = centerX + 'px';
-      particle.style.top = centerY + 'px';
-      particle.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
-
-      const angle = Math.random() * Math.PI * 2;
-      const distance = Math.random() * 180 + 120;
-      const vx = Math.cos(angle) * distance;
-      const vy = Math.sin(angle) * distance;
-
-      particle.style.transition = `all ${Math.random() * 1.2 + 1.2}s ease-out`;
-      assetsContainer.appendChild(particle);
-
-      // Lance la particule
-      setTimeout(() => {
-        particle.style.transform = `translate(${vx}px, ${vy}px) rotate(${Math.random() * 720 - 360}deg) scale(0.3)`;
-        particle.style.opacity = '0';
-      }, 50);
-
-      setTimeout(() => particle.remove(), 3000);
-    }, i * 30); // petit délai pour effet cascade
-  }
-
-  // Affiche le message final après 1.5–2s
-  setTimeout(() => {
-    finalMsg.classList.add('visible');
-  }, 1800);
-});
+// FINAL CONFESSION
+setTimeout(()=>{
+  final.innerHTML = "Ghostie why are you sooooooo💜";
+  final.classList.add("show");
+},18000);
