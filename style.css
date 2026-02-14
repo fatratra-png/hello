@@ -1,148 +1,171 @@
-*{margin:0;padding:0;box-sizing:border-box;}
-
-body{
-  height:100vh;
-  background:radial-gradient(circle at top,#ffe0f7,#d9b4ff);
-  font-family:"Baloo 2","Fredoka",sans-serif;
-  overflow:hidden;
-  transition:background 4s ease-in-out;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body.love-mode{
-  background:radial-gradient(circle at center,#2a003a,#0b0015);
+body {
+  height: 100vh;
+  background: radial-gradient(circle at top,#0b0015, #2a003a);
+  font-family: "Baloo 2", "Fredoka", sans-serif;
+  overflow: hidden;
+  transition: background 4s ease-in-out;
 }
 
-#bgHeart{
-  position:fixed;
-  inset:0;
-  background:url(lovely_assets5.png) center/300px no-repeat;
-  opacity:0;
-  filter:blur(6px);
-  transition:3s;
-}
-#bgHeart.show{opacity:.15;}
-
-#assets{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
+body.love-mode {
+  background: radial-gradient(circle at center, #2a003a, #0b0015);
 }
 
-.asset{
-  position:absolute;
-  background-size:contain;
-  background-repeat:no-repeat;
-  filter:drop-shadow(0 6px 12px rgba(0,0,0,.15));
-  animation:float 60s linear infinite;
+#bgHeart {
+  position: fixed;
+  inset: 0;
+  background: url(lovely_assets5.png) center/300px no-repeat;
+  opacity: 0;
+  filter: blur(6px);
+  transition: 3s;
+}
+#bgHeart.show {
+  opacity: 0.15;
 }
 
-@keyframes float{
-  from{transform:translateY(120vh) rotate(0deg);}
-  to{transform:translateY(-20vh) rotate(360deg);}
+#assets {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
 }
 
-.heart-center{
-  position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  text-align:center;
-  z-index:5;
+.asset {
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
+  animation: float 60s linear infinite;
 }
 
-#heart{
-  width:170px;
-  cursor:pointer;
-  animation:pulse 2s infinite;
-  transition:2s;
+@keyframes float {
+  from {
+    transform: translateY(120vh) rotate(0deg);
+  }
+  to {
+    transform: translateY(-20vh) rotate(360deg);
+  }
 }
 
-@keyframes pulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.1);}
+.heart-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 5;
 }
 
-#heart.fade-out{
-  opacity:0;
-  transform:scale(.4);
-  pointer-events:none;
+#heart {
+  width: 170px;
+  cursor: pointer;
+  animation: pulse 2s infinite;
+  transition: 2s;
 }
 
-#tap{
-  font-size:1.4rem;
-  color:#7e22ce;
-  margin-top:.6rem;
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }
 
-.message-box{
-  position:fixed;
-  bottom:10%;
-  width:100%;
-  text-align:center;
-  pointer-events:none;
+#heart.fade-out {
+  opacity: 0;
+  transform: scale(0.4);
+  pointer-events: none;
 }
 
-#title{
-  font-size:2.8rem;
-  color:white;
-  text-shadow:0 0 30px #c084fc;
-  opacity:0;
-  transform:translateY(20px);
-  transition:1.2s;
+#tap {
+  font-size: 1.4rem;
+  color: #7e22ce;
+  margin-top: 0.6rem;
 }
 
-.line{
-  opacity:0;
-  transform:translateY(10px);
-  transition:1s;
-  font-size:1.3rem;
-  color:#e9d5ff;
-  text-shadow:0 0 8px #9333ea;
+.message-box {
+  position: fixed;
+  bottom: 10%;
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
 }
 
-.big{
-  font-size:2rem;
-  font-weight:800;
-  color:#f0abfc;
-  animation:lovePulse 2s infinite;
+#title {
+  font-size: 2.8rem;
+  color: white;
+  text-shadow: 0 0 30px #c084fc;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 1.2s;
 }
 
-@keyframes lovePulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.05);}
+.line {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 1s;
+  font-size: 1.3rem;
+  color: #e9d5ff;
+  text-shadow: 0 0 8px #9333ea;
 }
 
-.signature{
-  margin-top:1.2rem;
-  font-style:italic;
+.big {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f0abfc;
+  animation: lovePulse 2s infinite;
 }
 
-.show{
-  opacity:1!important;
-  transform:translateY(0)!important;
+@keyframes lovePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
-#final{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:3.8rem;
-  font-weight:800;
-  color:white;
-  text-align:center;
-  text-shadow:0 0 50px #ff6fff;
-  opacity:0;
-  pointer-events:none;
-  transition:2s;
+.signature {
+  margin-top: 1.2rem;
+  font-style: italic;
 }
-#final.show{opacity:1;}
+
+.show {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+#final {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 50px #ff6fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: 2s;
+}
+#final.show {
+  opacity: 1;
+}
 #fireworks {
   position: fixed;
   inset: 0;
-  background: black;
   display: none;
   z-index: 999;
+  background: radial-gradient(circle at center, #050010, #000) !important;
 }
 
 .hide-all {
@@ -156,8 +179,13 @@ body.love-mode{
 }
 
 @keyframes blink {
-  0%,100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 #countdown {
   position: fixed;
@@ -173,6 +201,7 @@ body.love-mode{
   pointer-events: none;
   z-index: 1000;
   transition: 0.5s;
+  background-color: #0b0015;
 }
 
 #countdown.show {
@@ -180,7 +209,6 @@ body.love-mode{
 }
 /* Redmi Note 12S & phones ~412px width */
 @media (max-width: 412px) and (min-height: 800px) {
-
   #heart {
     width: 130px;
   }
@@ -219,18 +247,42 @@ body.blackout *:not(#countdown):not(#fireworks) {
   transition: 1.5s;
 }
 @keyframes shake {
-  0%,100% { transform: translate(0); }
-  20% { transform: translate(-5px, 5px); }
-  40% { transform: translate(5px, -5px); }
-  60% { transform: translate(-5px, 0); }
-  80% { transform: translate(5px, 0); }
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 5px);
+  }
+  40% {
+    transform: translate(5px, -5px);
+  }
+  60% {
+    transform: translate(-5px, 0);
+  }
+  80% {
+    transform: translate(5px, 0);
+  }
 }
 #countdown.show {
   animation: beat 1s infinite;
 }
 
 @keyframes beat {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
 }
-
+@keyframes textGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 10px #ff8aff;
+  }
+  50% {
+    text-shadow: 0 0 40px #ff00ff;
+  }
+}
